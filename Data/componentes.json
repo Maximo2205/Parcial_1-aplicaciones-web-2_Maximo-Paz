@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "nombre": "NVIDIA RTX 4090",
+    "tipo": "GPU",
+    "precio": 1999,
+    "stock": 3,
+    "marca": "NVIDIA",
+    "rendimiento": "Ultra Alto",
+    "ventas": 28,
+    "descripcion": "La GPU más potente para gaming y AI"
+  },
+  {
+    "id": 2,
+    "nombre": "NVIDIA RTX 4080",
+    "tipo": "GPU",
+    "precio": 1199,
+    "stock": 7,
+    "marca": "NVIDIA",
+    "rendimiento": "Muy Alto",
+    "ventas": 45,
+    "descripcion": "Ideal para 4K gaming"
+  },
+  {
+    "id": 3,
+    "nombre": "AMD Radeon RX 7900 XTX",
+    "tipo": "GPU",
+    "precio": 999,
+    "stock": 5,
+    "marca": "AMD",
+    "rendimiento": "Muy Alto",
+    "ventas": 32,
+    "descripcion": "Competencia directa de la RTX 4080"
+  },
+  {
+    "id": 4,
+    "nombre": "Intel Core i9-14900K",
+    "tipo": "CPU",
+    "precio": 650,
+    "stock": 8,
+    "marca": "Intel",
+    "rendimiento": "Ultra Alto",
+    "ventas": 52,
+    "descripcion": "24 núcleos, frecuencia hasta 6.0 GHz"
+  },
+  {
+    "id": 5,
+    "nombre": "AMD Ryzen 7 7800X3D",
+    "tipo": "CPU",
+    "precio": 450,
+    "stock": 12,
+    "marca": "AMD",
+    "rendimiento": "Muy Alto",
+    "ventas": 89,
+    "descripcion": "La mejor CPU para gaming gracias a su cache 3D"
+  },
+  {
+    "id": 6,
+    "nombre": "AMD Ryzen 5 7600X",
+    "tipo": "CPU",
+    "precio": 250,
+    "stock": 20,
+    "marca": "AMD",
+    "rendimiento": "Alto",
+    "ventas": 156,
+    "descripcion": "Excelente relación precio-rendimiento"
+  },
+  {
+    "id": 7,
+    "nombre": "Corsair Vengeance 32GB DDR5",
+    "tipo": "RAM",
+    "precio": 120,
+    "stock": 30,
+    "marca": "Corsair",
+    "rendimiento": "Alto",
+    "ventas": 210,
+    "descripcion": "6000MHz, CL30, perfil EXPO y XMP"
+  },
+  {
+    "id": 8,
+    "nombre": "Kingston Fury 16GB DDR4",
+    "tipo": "RAM",
+    "precio": 55,
+    "stock": 45,
+    "marca": "Kingston",
+    "rendimiento": "Medio",
+    "ventas": 320,
+    "descripcion": "Ideal para builds económicas"
+  },
+  {
+    "id": 9,
+    "nombre": "Samsung 990 Pro 2TB",
+    "tipo": "SSD",
+    "precio": 180,
+    "stock": 15,
+    "marca": "Samsung",
+    "rendimiento": "Ultra Alto",
+    "ventas": 78,
+    "descripcion": "PCIe 4.0, velocidades 7450 MB/s"
+  },
+  {
+    "id": 10,
+    "nombre": "Western Digital Black SN770 1TB",
+    "tipo": "SSD",
+    "precio": 80,
+    "stock": 25,
+    "marca": "Western Digital",
+    "rendimiento": "Alto",
+    "ventas": 145,
+    "descripcion": "PCIe 4.0, excelente para juegos"
+  },
+  {
+    "id": 11,
+    "nombre": "ASUS ROG Strix Z790-E",
+    "tipo": "Motherboard",
+    "precio": 480,
+    "stock": 6,
+    "marca": "ASUS",
+    "rendimiento": "Muy Alto",
+    "ventas": 34,
+    "descripcion": "Para Intel 13th y 14th gen, WiFi 7"
+  },
+  {
+    "id": 12,
+    "nombre": "MSI B650 Tomahawk",
+    "tipo": "Motherboard",
+    "precio": 220,
+    "stock": 14,
+    "marca": "MSI",
+    "rendimiento": "Alto",
+    "ventas": 92,
+    "descripcion": "Para AMD Ryzen 7000, excelente VRM"
+  },
+  {
+    "id": 13,
+    "nombre": "Noctua NH-D15",
+    "tipo": "Cooler",
+    "precio": 110,
+    "stock": 18,
+    "marca": "Noctua",
+    "rendimiento": "Alto",
+    "ventas": 67,
+    "descripcion": "El mejor cooler de aire del mercado"
+  },
+  {
+    "id": 14,
+    "nombre": "Corsair RM850e",
+    "tipo": "Fuente",
+    "precio": 130,
+    "stock": 22,
+    "marca": "Corsair",
+    "rendimiento": "Alto",
+    "ventas": 103,
+    "descripcion": "850W 80 Plus Gold, totalmente modular"
+  },
+  {
+    "id": 15,
+    "nombre": "Lian Li O11 Dynamic EVO",
+    "tipo": "Gabinete",
+    "precio": 160,
+    "stock": 10,
+    "marca": "Lian Li",
+    "rendimiento": "Medio",
+    "ventas": 58,
+    "descripcion": "Gabinete panorámico, excelente flujo de aire"
+  }
+]
