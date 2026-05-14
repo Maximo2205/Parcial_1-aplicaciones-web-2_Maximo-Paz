@@ -1,12 +1,14 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-const DATA_PATH = path.join(process.cwd(), 'data', 'componentes.json');
+const PATH = path.join(process.cwd(), 'data', 'componentes.json');
 
+
+// Función para obtener TODOS los componentes
 export const obtenerTodos = async (req, res) => {
     try {
 
-        const contenido = await fs.readFile(DATA_PATH, 'utf-8');
+        const contenido = await fs.readFile(PATH, 'utf-8');
         res.status(200).json(JSON.parse(contenido));
 
     } catch (error) {
@@ -16,14 +18,19 @@ export const obtenerTodos = async (req, res) => {
     }
 };
 
+// Funcion para obtener los componentes por Id
 export const obtenerPorId = async (req, res) => {
     try {
 
-        const contenido = await fs.readFile(DATA_PATH, 'utf-8');
+        const contenido = await fs.readFile(PATH, 'utf-8');
         const lista = JSON.parse(contenido);
         const item = lista.find(c => c.id === Number(req.params.id));
         
-        item ? res.json(item) : res.status(404).json({ mensaje: "Componente no encontrado" });
+         if (item) {
+            res.status(200).json(item);
+        } else {
+            res.status(404).json({ mensaje: "Componente no encontrado" });
+        }
 
     } catch (error) {
 
@@ -32,11 +39,14 @@ export const obtenerPorId = async (req, res) => {
     }
 };
 
+
+//Funcion para calcular el total del inventario (Endpoint NO REST)
 export const calcularTotalInventario = async (req, res) => {
     try {
 
-        const contenido = await fs.readFile(DATA_PATH, 'utf-8');
+        const contenido = await fs.readFile(PATH, 'utf-8');
         const lista = JSON.parse(contenido);
+         // Calculamos el valor total del inventario: suma de (precio × stock) de cada componente
         const total = lista.reduce((acc, item) => acc + (item.precio * item.stock), 0);
         
         res.json({ 
