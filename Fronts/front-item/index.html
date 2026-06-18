@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle - Componentes PC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: #2d3436;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 {
+            color: #fff;
+            font-size: 1.4rem;
+        }
+        .navbar h1 span {
+            color: #3498db;
+        }
+        .navbar .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+        .navbar .nav-links a:hover {
+            background: #444;
+        }
+        .navbar .nav-links .logout {
+            background: #e74c3c;
+        }
+        .navbar .nav-links .logout:hover {
+            background: #c0392b;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+        }
+        .card h2 {
+            color: #2d3436;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .detalle {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 0.5rem 1.5rem;
+        }
+        .detalle .label {
+            font-weight: 600;
+            color: #555;
+            padding: 0.4rem 0;
+        }
+        .detalle .value {
+            color: #2d3436;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .volver {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .volver:hover {
+            text-decoration: underline;
+        }
+        .loading {
+            text-align: center;
+            color: #888;
+            padding: 2rem;
+        }
+        .error-msg {
+            color: #e74c3c;
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🖥️ <span>Componentes</span> PC</h1>
+        <div class="nav-links">
+            <a href="/items">⬅️ Volver</a>
+            <a href="/cerrar-sesion" class="logout">🚪 Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2 id="titulo">Detalle del Componente</h2>
+            <div id="contenido">
+                <div class="loading">⏳ Cargando componente...</div>
+            </div>
+            <a href="/items" class="volver">← Volver a la lista</a>
+        </div>
+    </div>
+
+    <script>
+        function obtenerId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        async function cargarComponente() {
+            const contenedor = document.getElementById('contenido');
+            const titulo = document.getElementById('titulo');
+            const id = obtenerId();
+
+            if (!id) {
+                contenedor.innerHTML = '<p class="error-msg">❌ No se especificó un ID</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/v1/componentes/${id}`);
+
+                if (response.status === 401) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                if (response.status === 404) {
+                    contenedor.innerHTML = `<p class="error-msg">❌ Componente con ID ${id} no encontrado</p>`;
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('Error al cargar el componente');
+                }
+
+                const comp = await response.json();
+
+                titulo.textContent = comp.nombre;
+
+                const campos = [
+                    { label: 'ID', value: comp.id },
+                    { label: 'Tipo', value: comp.tipo || 'N/A' },
+                    { label: 'Precio', value: `$${comp.precio}` },
+                    { label: 'Stock', value: comp.stock },
+                    { label: 'Marca', value: comp.marca || 'N/A' },
+                    { label: 'Rendimiento', value: comp.rendimiento || 'N/A' },
+                    { label: 'Ventas', value: comp.ventas || '0' },
+                    { label: 'Descripción', value: comp.descripcion || 'Sin descripción' }
+                ];
+
+                let html = '<div class="detalle">';
+                campos.forEach(c => {
+                    html += `
+                        <span class="label">${c.label}</span>
+                        <span class="value">${c.value}</span>
+                    `;
+                });
+                html += '</div>';
+
+                contenedor.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error:', error);
+                contenedor.innerHTML = '<p class="error-msg">❌ Error al cargar el componente</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarComponente);
+    </script>
+</body>
+</html>

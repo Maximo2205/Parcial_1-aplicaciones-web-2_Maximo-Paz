@@ -4,13 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch index.mjs"
+    "dev": "node --watch index.mjs",
+    "docker:build": "cd docker && docker build -t parcial-pg .",
+    "docker:up": "cd docker && docker run -d -p 5432:5432 --name contenedor-parcial -e POSTGRES_PASSWORD=pass parcial-pg",
+    "docker:down": "cd docker && docker-compose down",
+    "docker:logs": "cd docker && docker-compose logs -f"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "express": "5.2.1"
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "express": "5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mime-types": "^3.0.2",
+    "multer": "^2.2.0",
+    "nanoid": "^5.1.11",
+    "pg": "^8.21.0"
   }
 }

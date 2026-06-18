@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Items - Componentes PC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: #2d3436;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 {
+            color: #fff;
+            font-size: 1.4rem;
+        }
+        .navbar h1 span {
+            color: #3498db;
+        }
+        .navbar .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+        .navbar .nav-links a:hover {
+            background: #444;
+        }
+        .navbar .nav-links .logout {
+            background: #e74c3c;
+        }
+        .navbar .nav-links .logout:hover {
+            background: #c0392b;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+        }
+        .card h2 {
+            color: #2d3436;
+            margin-bottom: 1rem;
+        }
+        .card .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .card .header-actions .volver {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .card .header-actions .volver:hover {
+            text-decoration: underline;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #2d3436;
+            color: #fff;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        tr:hover td {
+            background: #f8f9fa;
+        }
+        .btn {
+            background: #3498db;
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .loading {
+            text-align: center;
+            color: #888;
+            padding: 2rem;
+        }
+        .error-msg {
+            color: #e74c3c;
+            text-align: center;
+            padding: 2rem;
+        }
+        .total {
+            margin-top: 1rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🖥️ <span>Componentes</span> PC</h1>
+        <div class="nav-links">
+            <a href="/admin">⬅️ Volver</a>
+            <a href="/cerrar-sesion" class="logout">🚪 Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="header-actions">
+                <h2>📦 Lista de Componentes</h2>
+                <a href="/admin" class="volver">← Volver al panel</a>
+            </div>
+            <div id="contenido">
+                <div class="loading">⏳ Cargando componentes...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function cargarComponentes() {
+            const contenedor = document.getElementById('contenido');
+
+            try {
+                const response = await fetch('/api/v1/componentes');
+
+                if (response.status === 401) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('Error al cargar los componentes');
+                }
+
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    contenedor.innerHTML = '<p class="error-msg">📭 No hay componentes disponibles</p>';
+                    return;
+                }
+
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Marca</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.forEach(comp => {
+                    html += `
+                        <tr>
+                            <td>${comp.id}</td>
+                            <td>${comp.nombre}</td>
+                            <td>${comp.tipo || 'N/A'}</td>
+                            <td>$${comp.precio}</td>
+                            <td>${comp.stock}</td>
+                            <td>${comp.marca || 'N/A'}</td>
+                            <td>
+                                <a href="/item/?id=${comp.id}" class="btn">Ver</a>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                        </tbody>
+                    </table>
+                    <div class="total">Total: ${data.length} componentes</div>
+                `;
+
+                contenedor.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error:', error);
+                contenedor.innerHTML = '<p class="error-msg">❌ Error al cargar los componentes</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarComponentes);
+    </script>
+</body>
+</html>

@@ -1,4 +1,7 @@
 // Exporta la función para poder usarla en otros archivos
+
+import jwt from 'jsonwebtoken'
+
 export const validarId = (req, res, next) => {
 
     // Convierte el string a número con Number()
@@ -13,3 +16,22 @@ export const validarId = (req, res, next) => {
     }
     next();
 };
+
+export function comprobarToken(req, res, next) {
+    // Leer la cookie firmada 'token'
+    const token = req.signedCookies['token'];
+    
+    if (!token) {
+        console.log('🛡️ Acceso bloqueado: No se encontró el token de sesión.');
+        return res.redirect('/login');
+    }
+    
+    jwt.verify(token, process.env.FIRMA_JWT, (error, datosUtiles) => {
+        if (error) {
+            console.log('❌ Token inválido o expirado:', error.message);
+            return res.redirect('/login');
+        }
+        next();
+    });
+}
+

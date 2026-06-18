@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Componentes PC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-container {
+            background: #fff;
+            padding: 2.5rem 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-container h1 {
+            text-align: center;
+            color: #2d3436;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .login-container .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .error {
+            background: #fee;
+            color: #c0392b;
+            padding: 0.7rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+        .error.show {
+            display: block;
+        }
+        .info {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+            padding-top: 1.5rem;
+        }
+        .info strong {
+            color: #2d3436;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔐 Componentes PC</h1>
+        <p class="subtitle">Ingresa tus credenciales</p>
+
+        <div id="error-message" class="error">Usuario o contraseña incorrectos</div>
+
+        <form action="/api/v1/autenticar" method="POST">
+            <div class="form-group">
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario" name="usuario" required autofocus />
+            </div>
+            <div class="form-group">
+                <label for="pass">Contraseña</label>
+                <input type="password" id="pass" name="pass" required />
+            </div>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+
+        <div class="info">
+            Credenciales de prueba: <strong>admin</strong> / <strong>admin123</strong>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar error si viene en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error')) {
+            document.getElementById('error-message').classList.add('show');
+        }
+    </script>
+</body>
+</html>

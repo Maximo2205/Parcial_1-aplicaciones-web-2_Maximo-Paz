@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procedimiento - Componentes PC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: #2d3436;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 {
+            color: #fff;
+            font-size: 1.4rem;
+        }
+        .navbar h1 span {
+            color: #3498db;
+        }
+        .navbar .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+        .navbar .nav-links a:hover {
+            background: #444;
+        }
+        .navbar .nav-links .logout {
+            background: #e74c3c;
+        }
+        .navbar .nav-links .logout:hover {
+            background: #c0392b;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .card h2 {
+            color: #2d3436;
+            margin-bottom: 0.5rem;
+        }
+        .card .descripcion {
+            color: #555;
+            line-height: 1.6;
+        }
+        .card .descripcion code {
+            background: #f0f0f0;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .card .nota {
+            margin-top: 1rem;
+            color: #888;
+            font-size: 0.9rem;
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+        }
+        .btn-ejecutar {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-ejecutar:hover {
+            background: #219a52;
+        }
+        .btn-ejecutar:disabled {
+            background: #888;
+            cursor: not-allowed;
+        }
+        .resultado {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+        .resultado.exito {
+            display: block;
+            background: #e8f8f5;
+            border: 1px solid #a3e4d7;
+        }
+        .resultado.exito .resultado-title {
+            color: #1abc9c;
+            font-weight: 600;
+        }
+        .resultado.exito .resultado-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2d3436;
+            margin: 0.5rem 0;
+        }
+        .resultado.exito .resultado-footer {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        .resultado.error {
+            display: block;
+            background: #fdedec;
+            border: 1px solid #f5b7b1;
+            color: #c0392b;
+        }
+        .volver {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .volver:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🖥️ <span>Componentes</span> PC</h1>
+        <div class="nav-links">
+            <a href="/admin">⬅️ Volver</a>
+            <a href="/cerrar-sesion" class="logout">🚪 Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>⚙️ Procedimiento: Valorización de Inventario</h2>
+            <div class="descripcion">
+                <p>Este procedimiento calcula el <strong>valor total del inventario</strong> sumando el precio de cada componente multiplicado por su stock disponible:</p>
+                <br />
+                <p style="text-align: center; font-size: 1.1rem;">
+                    <code>Valor Total = Σ (Precio × Stock)</code> para todos los componentes
+                </p>
+            </div>
+            <div class="nota">
+                ⚠️ <strong>NOTA:</strong> Este endpoint <strong>NO es REST</strong> porque representa una acción/procedimiento, no un recurso (sustantivo plural).
+            </div>
+        </div>
+
+        <div class="card" style="text-align: center;">
+            <button id="btn-ejecutar" class="btn-ejecutar">🚀 Ejecutar Procedimiento</button>
+            <div id="resultado" class="resultado"></div>
+        </div>
+
+        <a href="/admin" class="volver">← Volver al panel</a>
+    </div>
+
+    <script>
+        const btn = document.getElementById('btn-ejecutar');
+        const resultadoDiv = document.getElementById('resultado');
+
+        btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            btn.textContent = '⏳ Procesando...';
+
+            try {
+                const response = await fetch('/api/v1/componentesInventario/calcular-total-inventario');
+
+                if (response.status === 401) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error('Error al ejecutar el procedimiento');
+                }
+
+                const data = await response.json();
+
+                resultadoDiv.className = 'resultado exito';
+                resultadoDiv.innerHTML = `
+                    <div class="resultado-title">✅ ${data.procedimiento}</div>
+                    <div class="resultado-value">${data.resultado}</div>
+                    <div class="resultado-footer">Procesado: ${new Date().toLocaleString()}</div>
+                `;
+
+            } catch (error) {
+                console.error('Error:', error);
+                resultadoDiv.className = 'resultado error';
+                resultadoDiv.innerHTML = `❌ Error al ejecutar el procedimiento: ${error.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚀 Ejecutar Procedimiento';
+            }
+        });
+    </script>
+</body>
+</html>

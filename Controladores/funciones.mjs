@@ -41,22 +41,4 @@ export const obtenerPorId = async (req, res) => {
 
 
 //Funcion para calcular el total del inventario (Endpoint NO REST)
-export const calcularTotalInventario = async (req, res) => {
-    try {
 
-        const contenido = await fs.readFile(PATH, 'utf-8');
-        const lista = JSON.parse(contenido);
-         // Calculamos el valor total del inventario: suma de (precio × stock) de cada componente
-        const total = lista.reduce((acc, item) => acc + (item.precio * item.stock), 0);
-        
-        res.json({ 
-            procedimiento: "Valorización de Inventario",
-            resultado: `El valor total de los componentes en stock es $${total}`
-        });
-
-    } catch (error) {
-
-        res.status(500).json({ mensaje: "Error al procesar el inventario" });
-
-    }
-};
